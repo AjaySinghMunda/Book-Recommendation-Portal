@@ -68,8 +68,6 @@ if len(books) == 0:
 # ------------------------------------------------
 df = pd.DataFrame(books)
 
-# Remove MongoDB ObjectId
-df = df.drop(columns=["_id"])
 
 # ------------------------------------------------
 # Library Statistics
