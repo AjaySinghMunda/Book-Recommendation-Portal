@@ -63,6 +63,7 @@ genre = st.selectbox(
         "Horror",
         "Self Help",
         "Poetry",
+        "Adventure"
         "Other"
     ]
 )
