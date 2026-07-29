@@ -1,13 +1,27 @@
-import pymongo
 import streamlit as st
+import pymongo
 
+# ------------------------------------------------
+# Page Configuration
+# ------------------------------------------------
+st.set_page_config(
+    page_title="Upload Catalog",
+    page_icon="📚",
+    layout="centered"
+)
+
+# ------------------------------------------------
 # MongoDB Connection
+# ------------------------------------------------
 conn = pymongo.MongoClient(st.secrets["MONGO_URI"])
 
 db = conn["BookRecommendationSystem"]
 
 catalog_collection = db["Catalog"]
 
+# ------------------------------------------------
+# Books
+# ------------------------------------------------
 books = [
     {
         "title": "Harry Potter and the Philosopher's Stone",
@@ -151,8 +165,19 @@ books = [
     }
 ]
 
-catalog_collection.delete_many({})
+# ------------------------------------------------
+# UI
+# ------------------------------------------------
+st.title("📚 Upload Catalog")
 
-catalog_collection.insert_many(books)
+st.write("This page uploads the master book catalog to MongoDB.")
 
-print("Catalog uploaded successfully!")
+st.divider()
+
+if st.button("Upload Catalog", use_container_width=True):
+
+    catalog_collection.delete_many({})
+
+    catalog_collection.insert_many(books)
+
+    st.success(f"Successfully uploaded {len(books)} books!")
