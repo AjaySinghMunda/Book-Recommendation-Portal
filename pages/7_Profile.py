@@ -69,12 +69,76 @@ st.title("👤 My Profile")
 st.divider()
 
 # ------------------------------------------------
-# User Details
+# Account Information
 # ------------------------------------------------
 st.subheader("Account Information")
 
 st.write(f"**Name:** {user['name']}")
 st.write(f"**Email:** {user['email']}")
+
+st.divider()
+
+# ------------------------------------------------
+# Change Password
+# ------------------------------------------------
+st.subheader("🔒 Change Password")
+
+current_password = st.text_input(
+    "Current Password",
+    type="password"
+)
+
+new_password = st.text_input(
+    "New Password",
+    type="password"
+)
+
+confirm_password = st.text_input(
+    "Confirm New Password",
+    type="password"
+)
+
+if st.button(
+    "Change Password",
+    use_container_width=True
+):
+
+    if not current_password or not new_password or not confirm_password:
+        st.error("Please fill all the fields.")
+
+    elif current_password != user["password"]:
+        st.error("Current password is incorrect.")
+
+    elif new_password != confirm_password:
+        st.error("New passwords do not match.")
+
+    elif current_password == new_password:
+        st.error("New password must be different from the current password.")
+
+    elif len(new_password) < 6:
+        st.error("Password must contain at least 6 characters.")
+
+    else:
+
+        users_collection.update_one(
+            {
+                "email": st.session_state.user_email
+            },
+            {
+                "$set": {
+                    "password": new_password
+                }
+            }
+        )
+
+        st.success("Password changed successfully.")
+
+        # Refresh user information
+        user = users_collection.find_one(
+            {
+                "email": st.session_state.user_email
+            }
+        )
 
 st.divider()
 
